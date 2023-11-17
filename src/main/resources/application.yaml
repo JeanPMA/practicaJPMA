@@ -3,4 +3,4 @@ spring:
     active: dev
 
   application:
-    name: App Courses
+    name: App PRACTICA

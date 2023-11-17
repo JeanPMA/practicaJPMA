@@ -1,51 +1,22 @@
-package com.diplomado.practicaJPMA.domain.entities;
+package com.diplomado.practicaJPMA.dto;
 
-import jakarta.persistence.*;
+import com.diplomado.practicaJPMA.domain.entities.Rol;
+import com.diplomado.practicaJPMA.domain.entities.UserDetail;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "user")
-public class User {
-
-    @Id
-    @SequenceGenerator(name = "user_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
-    @Column(nullable = false)
+public class UsuarioDTO {
     private Integer id;
-    @Column(length = 150, nullable = false)
     private String username;
-    @Column(length = 150, nullable = false)
     private String password;
-    @Column(length = 150, nullable = false)
     private String email;
-
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP")
     private LocalDateTime created_at;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserDetail userDetail;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "roles_user",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "rol_id"))
     private Set<Rol> roles = new HashSet<>();
 
-    public User() {
-    }
-
-    public User(String username, String password, String email, LocalDateTime created_at, UserDetail userDetail, Set<Rol> roles) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.created_at = created_at;
-        this.userDetail = userDetail;
-        this.roles = roles;
+    public UsuarioDTO() {
     }
 
     public Integer getId() {
@@ -104,5 +75,16 @@ public class User {
         this.roles = roles;
     }
 
-
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", created_at=" + created_at +
+                ", userDetail=" + userDetail +
+                ", roles=" + roles +
+                '}';
+    }
 }

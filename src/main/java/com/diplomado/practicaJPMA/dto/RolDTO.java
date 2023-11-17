@@ -1,32 +1,17 @@
-package com.diplomado.practicaJPMA.domain.entities;
+package com.diplomado.practicaJPMA.dto;
 
-import jakarta.persistence.*;
+import com.diplomado.practicaJPMA.domain.entities.Usuario;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "rol")
-public class Rol {
+public class RolDTO {
 
-    @Id
-    @SequenceGenerator(name = "rol_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rol_sequence")
-    @Column(nullable = false)
     private Integer id;
-
-    @Column(length = 100, nullable = false)
     private String name;
-
-    @ManyToMany(mappedBy = "roles")
     private Set<Usuario> usuarios = new HashSet<>();
 
-    public Rol() {
-    }
-
-    public Rol(String name, Set<Usuario> usuarios) {
-        this.name = name;
-        this.usuarios = usuarios;
+    public RolDTO() {
     }
 
     public Integer getId() {
@@ -55,7 +40,7 @@ public class Rol {
 
     @Override
     public String toString() {
-        return "Rol{" +
+        return "RolDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", usuarios=" + usuarios +
