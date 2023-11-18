@@ -9,7 +9,6 @@ public class RolDTO {
 
     private Integer id;
     private String name;
-    private Set<Usuario> usuarios = new HashSet<>();
 
     public RolDTO() {
     }
@@ -30,20 +29,11 @@ public class RolDTO {
         this.name = name;
     }
 
-    public Set<Usuario> getUsuarios() {
-        return usuarios;
-    }
-
-    public void setUsuarios(Set<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
-
     @Override
     public String toString() {
         return "RolDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", usuarios=" + usuarios +
                 '}';
     }
 }

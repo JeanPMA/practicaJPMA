@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface UsuarioService {
     List<UsuarioDTO> listUsers();
+    List<UsuarioDTO> listUsersDetailed();
     UsuarioDTO save(UsuarioDTO dto);
     Optional<UsuarioDTO> getUserById(Integer id);
     void delete(Integer id);

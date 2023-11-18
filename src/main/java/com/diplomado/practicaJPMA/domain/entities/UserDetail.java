@@ -8,8 +8,8 @@ import java.time.LocalDate;
 @Table(name = "user_detail")
 public class UserDetail {
     @Id
-    @SequenceGenerator(name = "userDetail_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userDetail_sequence")
+    @SequenceGenerator(name = "user_detail_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_detail_sequence")
     @Column(nullable = false)
     private Integer id;
 

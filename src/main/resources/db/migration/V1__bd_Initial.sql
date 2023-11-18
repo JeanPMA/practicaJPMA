@@ -33,7 +33,7 @@ create table user_detail (
 alter table user_detail add constraint fk_user_id_Ref_User foreign key (user_id)
     references usuario (id) on delete restrict on update restrict;
 
-create sequence userDetail_sequence as integer increment 1;
+create sequence user_detail_sequence as integer increment 1;
 
 
 -- create user_rol table

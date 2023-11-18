@@ -3,6 +3,7 @@ package com.diplomado.practicaJPMA.dto;
 import com.diplomado.practicaJPMA.domain.entities.Rol;
 import com.diplomado.practicaJPMA.domain.entities.UserDetail;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,11 +14,14 @@ public class UsuarioDTO {
     private String password;
     private String email;
     private LocalDateTime created_at;
-    private UserDetail userDetail;
-    private Set<Rol> roles = new HashSet<>();
+    private String first_name;
+    private String last_name;
+    private Integer age;
+    private LocalDate birth_day;
 
     public UsuarioDTO() {
     }
+
 
     public Integer getId() {
         return id;
@@ -59,32 +63,35 @@ public class UsuarioDTO {
         this.created_at = created_at;
     }
 
-    public UserDetail getUserDetail() {
-        return userDetail;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setUserDetail(UserDetail userDetail) {
-        this.userDetail = userDetail;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public Set<Rol> getRoles() {
-        return roles;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public void setRoles(Set<Rol> roles) {
-        this.roles = roles;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
-    @Override
-    public String toString() {
-        return "UsuarioDTO{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", created_at=" + created_at +
-                ", userDetail=" + userDetail +
-                ", roles=" + roles +
-                '}';
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public LocalDate getBirth_day() {
+        return birth_day;
+    }
+
+    public void setBirth_day(LocalDate birth_day) {
+        this.birth_day = birth_day;
     }
 }

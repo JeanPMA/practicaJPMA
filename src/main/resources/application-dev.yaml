@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/practicaMod3
+    url: jdbc:postgresql://localhost:5432/Modulo3JPMA
     username: postgres
     password: jpma
   jpa:
