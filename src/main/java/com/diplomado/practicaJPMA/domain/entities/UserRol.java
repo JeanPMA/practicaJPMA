@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 public class UserRol {
 
     @Id
-    @SequenceGenerator(name = "userRol_sequence", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userRol_sequence")
+    @SequenceGenerator(name = "user_rol_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_rol_sequence")
     @Column(nullable = false)
     private Long id;
 

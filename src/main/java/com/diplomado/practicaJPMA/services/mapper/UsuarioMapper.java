@@ -46,8 +46,6 @@ public class UsuarioMapper implements CustomMapper<UsuarioDTO, Usuario>{
         }
 
 
-
-
         return usuarioDTO;
     }
     @Override

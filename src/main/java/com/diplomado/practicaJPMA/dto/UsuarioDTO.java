@@ -6,6 +6,7 @@ import com.diplomado.practicaJPMA.domain.entities.UserDetail;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UsuarioDTO {
@@ -18,6 +19,7 @@ public class UsuarioDTO {
     private String last_name;
     private Integer age;
     private LocalDate birth_day;
+    private List<Integer> rolesIds;
 
     public UsuarioDTO() {
     }
@@ -93,5 +95,13 @@ public class UsuarioDTO {
 
     public void setBirth_day(LocalDate birth_day) {
         this.birth_day = birth_day;
+    }
+
+    public List<Integer> getRolesIds() {
+        return rolesIds;
+    }
+
+    public void setRolesIds(List<Integer> rolesIds) {
+        this.rolesIds = rolesIds;
     }
 }

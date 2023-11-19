@@ -1,8 +1,10 @@
 package com.diplomado.practicaJPMA.web.rest;
 
+import com.diplomado.practicaJPMA.domain.entities.Usuario;
 import com.diplomado.practicaJPMA.dto.RolDTO;
 import com.diplomado.practicaJPMA.dto.UsuarioDTO;
 import com.diplomado.practicaJPMA.services.UsuarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/v1/usuarios")
@@ -42,14 +45,13 @@ public class UsuarioController {
             throw new IllegalArgumentException("Usuario no puede tener ya un id ingresado.");
         }
 
-        UsuarioDTO usuarioDTO = usuarioService.save(dto);
+       usuarioService.save(dto);
 
-        return ResponseEntity.created(new URI("/v1/usuarios/" + usuarioDTO.getId())).body(usuarioDTO);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> editUsuario(@RequestBody final UsuarioDTO dto,
-                                          @PathVariable final Integer id) throws URISyntaxException {
+    public ResponseEntity<UsuarioDTO> editarUsuario(@PathVariable Integer id, @RequestBody UsuarioDTO dto) throws URISyntaxException {
         if (dto.getId() == null) {
             throw new IllegalArgumentException("Invalid usuario id, null value");
         }
@@ -57,9 +59,9 @@ public class UsuarioController {
             throw new IllegalArgumentException("Invalid id");
         }
 
-        return ResponseEntity
-                .ok()
-                .body(this.usuarioService.save(dto));
+        usuarioService.editarUsuario(id, dto);
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -67,5 +69,12 @@ public class UsuarioController {
         usuarioService.delete(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Usuario> actualizarParcial(@RequestBody Usuario usuario, @PathVariable final Integer id) {
+        return ResponseEntity
+                .ok()
+                .body(this.usuarioService.parcial(usuario, id));
     }
 }

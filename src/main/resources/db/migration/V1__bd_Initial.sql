@@ -45,7 +45,7 @@ create table user_rol (
                             rol_id integer,
                             primary key (id)
 );
-create sequence userRol_sequence as integer increment 1;
+create sequence user_rol_sequence as integer increment 1;
 
 alter table user_rol add constraint FK_User_rol_Ref_User foreign key (user_id)
     references usuario (id) on delete restrict on update restrict;
