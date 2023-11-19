@@ -14,8 +14,7 @@ public class UserRolMapper implements CustomMapper<UserRolDTO, UserRol>{
         userRolDTO.setId(userRol.getId());
         userRolDTO.setActive(userRol.getActive());
         userRolDTO.setCreated_at(userRol.getCreated_at());
-        userRolDTO.setUsuario(userRol.getUser());
-        userRolDTO.setRol(userRol.getRol());
+
 
         return userRolDTO;
     }
@@ -26,8 +25,7 @@ public class UserRolMapper implements CustomMapper<UserRolDTO, UserRol>{
         userRol.setId(userRolDTO.getId());
         userRol.setActive(userRolDTO.getActive());
         userRol.setCreated_at(userRolDTO.getCreated_at());
-        userRol.setUser(userRolDTO.getUsuario());
-        userRol.setRol(userRolDTO.getRol());
+
 
         return userRol;
     }

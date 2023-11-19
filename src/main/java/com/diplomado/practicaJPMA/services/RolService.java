@@ -9,5 +9,7 @@ public interface RolService {
     List<RolDTO> listRoles();
     RolDTO save(RolDTO dto);
     Optional<RolDTO> getRolById(Integer id);
+
+    List<RolDTO> listRolesConUsuarios();
     void delete(Integer id);
 }

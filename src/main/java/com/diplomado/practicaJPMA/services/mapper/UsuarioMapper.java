@@ -1,5 +1,6 @@
 package com.diplomado.practicaJPMA.services.mapper;
 
+import com.diplomado.practicaJPMA.domain.entities.Rol;
 import com.diplomado.practicaJPMA.domain.entities.UserDetail;
 import com.diplomado.practicaJPMA.domain.entities.Usuario;
 import com.diplomado.practicaJPMA.dto.UserDetailDTO;
@@ -7,6 +8,8 @@ import com.diplomado.practicaJPMA.dto.UsuarioDTO;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Component
 public class UsuarioMapper implements CustomMapper<UsuarioDTO, Usuario>{
@@ -45,9 +48,21 @@ public class UsuarioMapper implements CustomMapper<UsuarioDTO, Usuario>{
 
         }
 
+        if (!usuario.getRoles().isEmpty() && usuario.getRoles() != null) {
+            usuarioDTO.setRolesIds(usuario.getRoles().stream().map(Rol::getId).collect(Collectors.toList()));
+
+        } else {
+            usuarioDTO.setRolesIds(Collections.singletonList(ValorPredeterminado.ID));
+
+        }
 
         return usuarioDTO;
     }
+
+    private static class ValorPredeterminado {
+        private static final Integer ID = 0;
+    }
+
     @Override
     public Usuario toEntity(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();

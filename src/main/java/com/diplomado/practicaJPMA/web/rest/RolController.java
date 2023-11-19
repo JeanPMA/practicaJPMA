@@ -32,7 +32,10 @@ public class RolController {
                 .ok()
                 .body(rolService.getRolById(id).orElseThrow(() -> new IllegalArgumentException("Recurno no encontrado: " + id)));
     }
-
+    @GetMapping("/total")
+    public ResponseEntity<List<RolDTO>> rolesConUsuarios() {
+        return ResponseEntity.ok().body(rolService.listRolesConUsuarios());
+    }
     @PostMapping
     public ResponseEntity<RolDTO> create(@RequestBody final RolDTO dto) throws URISyntaxException {
         if (dto.getId() != null) {

@@ -14,7 +14,7 @@ import com.diplomado.practicaJPMA.services.mapper.UsuarioMapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +44,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UsuarioDTO> listUsers() {
         return usuarioRepository.findAll()
                 .stream()
@@ -51,6 +52,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UsuarioDTO> listUsersDetailed() {
         return usuarioRepository.findAll()
                 .stream()
@@ -67,26 +69,30 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuarioRepository.save(usuario);
 
-        UserDetail userDetail = new UserDetail();
-        userDetail.setUser(usuario);
-        userDetail.setFirst_name(dto.getFirst_name());
-        userDetail.setLast_name(dto.getLast_name());
-        userDetail.setAge(dto.getAge());
-        userDetail.setBirth_day(dto.getBirth_day());
-        userDetailRepository.save(userDetail);
-
-        List<Rol> roles = rolRepository.findAllById(dto.getRolesIds());
-
-        for (Rol rol : roles) {
-            UserRol userRol = new UserRol();
-            userRol.setUser(usuario);
-            userRol.setRol(rol);
-            userRol.setCreated_at(LocalDateTime.now());
-            userRol.setActive(true);
-
-            userRolRepository.save(userRol);
+        if (dto.getFirst_name() != null && dto.getLast_name() != null && dto.getAge() != null && dto.getBirth_day() != null){
+            UserDetail userDetail = new UserDetail();
+            userDetail.setUser(usuario);
+            userDetail.setFirst_name(dto.getFirst_name());
+            userDetail.setLast_name(dto.getLast_name());
+            userDetail.setAge(dto.getAge());
+            userDetail.setBirth_day(dto.getBirth_day());
+            userDetailRepository.save(userDetail);
         }
 
+        if (dto.getRolesIds() != null){
+            List<Rol> roles = rolRepository.findAllById(dto.getRolesIds());
+
+
+            for (Rol rol : roles) {
+                UserRol userRol = new UserRol();
+                userRol.setUser(usuario);
+                userRol.setRol(rol);
+                userRol.setCreated_at(LocalDateTime.now());
+                userRol.setActive(true);
+
+                userRolRepository.save(userRol);
+            }
+        }
         return usuarioMapper.toDto(usuario);
     }
     public UsuarioDTO editarUsuario(Integer usuarioId, UsuarioDTO dto) {
@@ -98,65 +104,64 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuario.setEmail(dto.getEmail());
         usuario.setCreated_at(usuario.getCreated_at());
 
-        UserDetail userDetail = usuario.getUserDetail();
-        if (userDetail != null){
-            userDetail.setFirst_name(dto.getFirst_name());
-            userDetail.setLast_name(dto.getLast_name());
-            userDetail.setAge(dto.getAge());
-            userDetail.setBirth_day(dto.getBirth_day());
-            userDetailRepository.save(userDetail);
+        if (dto.getFirst_name() != null && dto.getLast_name() != null && dto.getAge() != null && dto.getBirth_day() != null) {
+            UserDetail userDetail = usuario.getUserDetail();
+            if (userDetail != null){
+                userDetail.setFirst_name(dto.getFirst_name());
+                userDetail.setLast_name(dto.getLast_name());
+                userDetail.setAge(dto.getAge());
+                userDetail.setBirth_day(dto.getBirth_day());
+                userDetailRepository.save(userDetail);
+            }
         }
 
-        // Obtener roles actuales del usuario
-        List<UserRol> userRoles = userRolRepository.findByUser(usuario);
 
-// Obtener la lista de IDs de roles proporcionados en el DTO
-        List<Integer> rolesIds = dto.getRolesIds();
+        if (dto.getRolesIds() != null){
+            List<UserRol> userRoles = userRolRepository.findByUser(usuario);
 
-// Eliminar roles que ya no están en la lista proporcionada
-        userRoles.stream()
-                .filter(userRol -> !rolesIds.contains(userRol.getRol().getId()))
-                .forEach(userRolRepository::delete);
+            List<Integer> rolesIds = dto.getRolesIds();
 
-// Agregar nuevos roles que no existen actualmente para el usuario
-        rolesIds.stream()
-                .filter(rolId -> userRoles.stream().noneMatch(userRol -> userRol.getRol().getId().equals(rolId)))
-                .forEach(rolId -> {
-                    Rol rol = rolRepository.findById(rolId).orElse(null);
-                    if (rol != null) {
-                        UserRol userRol = new UserRol();
-                        userRol.setUser(usuario);
-                        userRol.setRol(rol);
-                        userRol.setCreated_at(LocalDateTime.now());
-                        userRol.setActive(true);
+            userRoles.stream()
+                    .filter(userRol -> !rolesIds.contains(userRol.getRol().getId()))
+                    .forEach(userRolRepository::delete);
 
-                        userRolRepository.save(userRol);
-                    }
-                });
+            rolesIds.stream()
+                    .filter(rolId -> userRoles.stream().noneMatch(userRol -> userRol.getRol().getId().equals(rolId)))
+                    .forEach(rolId -> {
+                        Rol rol = rolRepository.findById(rolId).orElse(null);
+                        if (rol != null) {
+                            UserRol userRol = new UserRol();
+                            userRol.setUser(usuario);
+                            userRol.setRol(rol);
+                            userRol.setCreated_at(LocalDateTime.now());
+                            userRol.setActive(true);
+
+                            userRolRepository.save(userRol);
+                        }
+                    });
+        }
+
 
         usuarioRepository.save(usuario);
 
         return usuarioMapper.toDto(usuario);
     }
     @Override
+    @Transactional(readOnly = true)
     public Optional<UsuarioDTO> getUserById(Integer id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toDtoDetailed);
     }
 
     @Override
     public void delete(Integer id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            usuario.getRoles().clear();
+        }
         usuarioRepository.deleteById(id);
     }
 
-    @Override
-    public Usuario parcial(Usuario usuario, Integer id){
-        Usuario usuarioExistente = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        BeanUtils.copyProperties(usuario, usuarioExistente, "id");
-
-        return usuarioRepository.save(usuarioExistente);
-    }
 
     @Transactional
     public void deleteRolesByUser(Usuario usuario) {

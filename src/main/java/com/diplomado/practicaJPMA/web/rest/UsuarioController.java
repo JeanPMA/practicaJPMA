@@ -71,10 +71,5 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Usuario> actualizarParcial(@RequestBody Usuario usuario, @PathVariable final Integer id) {
-        return ResponseEntity
-                .ok()
-                .body(this.usuarioService.parcial(usuario, id));
-    }
+
 }

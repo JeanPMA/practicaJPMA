@@ -14,6 +14,6 @@ public interface UsuarioService {
     UsuarioDTO save(UsuarioDTO dto);
     Optional<UsuarioDTO> getUserById(Integer id);
     UsuarioDTO editarUsuario( Integer id, UsuarioDTO dto);
-    Usuario parcial(Usuario usuario, Integer id);
+
     void delete(Integer id);
 }
