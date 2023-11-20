@@ -97,7 +97,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
     public UsuarioDTO editarUsuario(Integer usuarioId, UsuarioDTO dto) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado " + usuarioId));
 
         usuario.setUsername(dto.getUsername());
         usuario.setPassword(dto.getPassword());
@@ -150,18 +150,21 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional(readOnly = true)
     public Optional<UsuarioDTO> getUserById(Integer id) {
         return usuarioRepository.findById(id).map(usuarioMapper::toDtoDetailed);
+
     }
 
     @Override
     public void delete(Integer id) {
-        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado " + id));
+
         if (usuario != null) {
             usuario.getRoles().clear();
         }
         usuarioRepository.deleteById(id);
     }
 
-
+    /*ADICIONAL*/
 
     @Transactional
     public void deleteRolesByUser(Usuario usuario) {
@@ -169,5 +172,21 @@ public class UsuarioServiceImpl implements UsuarioService {
         entityManager.createQuery(jpql)
                 .setParameter("user", usuario)
                 .executeUpdate();
+    }
+
+
+    public class ApplicationException extends RuntimeException {
+        public ApplicationException(String message) {
+            super(message);
+        }
+
+        public ApplicationException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+    public class ResourceNotFoundException extends ApplicationException {
+        public ResourceNotFoundException(String message) {
+            super(message);
+        }
     }
 }

@@ -33,11 +33,27 @@ public class UserRolServiceImpl implements UserRolService {
     @Override
     public UserRol parcial(UserRolDTO dto, Long id){
         UserRol userRol = userRolRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("UsuarioRol no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("UsuarioRol no encontrado " + id));
 
         if (dto.getActive() != null) {
             userRol.setActive(dto.getActive());
         }
         return userRolRepository.save(userRol);
+    }
+
+
+    public class ApplicationException extends RuntimeException {
+        public ApplicationException(String message) {
+            super(message);
+        }
+
+        public ApplicationException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+    public class ResourceNotFoundException extends ApplicationException {
+        public ResourceNotFoundException(String message) {
+            super(message);
+        }
     }
 }

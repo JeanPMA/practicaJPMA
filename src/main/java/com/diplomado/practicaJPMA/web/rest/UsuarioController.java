@@ -13,11 +13,15 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @RestController
 @RequestMapping("/v1/usuarios")
 public class UsuarioController {
     private final UsuarioService usuarioService;
+    private static final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 
 
     public UsuarioController(UsuarioService usuarioService) {
@@ -34,9 +38,15 @@ public class UsuarioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDTO> getUsuariosById(@PathVariable final Integer id) {
-        return ResponseEntity
-                .ok()
-                .body(usuarioService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado: " + id)));
+        try{
+            return ResponseEntity
+                    .ok()
+                    .body(usuarioService.getUserById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado: " + id)));
+        } catch (ApplicationException e){
+            log.error("Un error ocurrio tratando de obtener el usuario", e);
+            throw e;
+        }
+
     }
 
     @PostMapping
@@ -71,5 +81,19 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    public class ApplicationException extends RuntimeException {
+        public ApplicationException(String message) {
+            super(message);
+        }
 
+        public ApplicationException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    public class ResourceNotFoundException extends ApplicationException {
+        public ResourceNotFoundException(String message) {
+            super(message);
+        }
+    }
 }
